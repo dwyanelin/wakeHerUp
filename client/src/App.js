@@ -32,10 +32,10 @@ class App extends Component {
 			this.setState({intervalIsSet:interval});
 		}
 
-		fetch("/api/getYoutube")
+		/*fetch("/api/getYoutube")
 			.then(video=>video.json())
 			.then(res=>res.videoIds&&this.setState({videoIds:res.videoIds}))
-			.catch(error=>console.log("App.componentDidMount.getYoutube", error));
+			.catch(error=>console.log("App.componentDidMount.getYoutube", error));*/
 
 		fetch("/api/getAlarm")
 			.then(res=>res.json())
@@ -69,7 +69,6 @@ class App extends Component {
 		alarmDateEnd.setMinutes(+alarm.split(":")[1]+1);
 		alarmDateEnd.setSeconds(0);
 		var now=new Date();
-		//console.log(alarmDateEnd, now, alarmDateEnd>now);
 		const opts={
 			height:'253',
 			width:'227'
@@ -173,7 +172,6 @@ class App extends Component {
 						{videoIds.length<=0
 							?<span style={{color:"#fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:51}}>NO VIDEOS YET</span>
 							:videoIds.map((e, i)=>{
-								//console.log(e, i);
 								return (<YouTube videoId={e} opts={opts} onError={()=>{}} key={i} containerClassName={"youtube"}/>);
 							})
 						}
