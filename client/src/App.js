@@ -76,20 +76,25 @@ class App extends Component {
 		return (
 			<div style={{backgroundImage:`url(${Background})`, backgroundSize:"100vw", backgroundAttachment:"fixed", backgroundPosition:"center", display:"flex", flexDirection:"column", alignItems:"center"}}>
 				<div style={{height:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}}>{/*第一頁*/}
-					<div style={{marginRight:20, textAlign:"right", fontFamily:"helvetica-w01-light,sans-serif", fontSize:73, color:"#E8E6E6"}}>{/*上*/}
+					<div style={{marginRight:20, marginBottom:40, textAlign:"right", fontFamily:"helvetica-w01-light,sans-serif", fontSize:73, color:"#fff"}}>{/*上*/}
 						{alarm===""?alarm:alarmDateEnd>now?alarm:""}
 					</div>{/*上*/}
 					<div style={{display:"flex"}}>{/*下*/}
 						<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-start"}}>{/*下左*/}
-							<div style={{marginBottom:85, fontFamily:"helvetica-w01-bold,sans-serif", fontSize:134, color:"#E8E6E6"}}>
-								<div style={{lineHeight:"0.5em"}}>wake</div>
-								<div style={{lineHeight:"0.5em"}}>her up</div>
+							<div style={{marginBottom:20, fontFamily:"helvetica-w01-bold,sans-serif", fontSize:134, color:"#fff"}}>
+								<div style={{lineHeight:"0.6em"}}>wake</div>
+								<div style={{lineHeight:"0.6em"}}>her up</div>
 							</div>
-							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, color:"#fff", cursor:"pointer", textDecoration:"underline"}}>Vote to decide when she will be waken ></a>
+							<div style={{fontFamily:"helvetica-w01-bold,sans-serif", fontSize:20, color:"#fff", marginLeft:10}}>30 days performance</div>
 						</div>{/*下左*/}
-						<div style={{flex:1, display:"flex", justifyContent:"flex-end"}}>
-							<img src={require('./image/her.jpg')} style={{width:431, height:573}} alt="her"/>{/*下右*/}
-						</div>
+						<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-end"}}>{/*下右*/}
+							<div style={{width:368, height:195, border:"2px solid #fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold", paddingTop:195, paddingLeft:20, marginBottom:20}}>
+								<div>Live stream</div>
+								<div>starts from</div>
+								<div>00:00.</div>
+							</div>
+							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, cursor:"pointer", textDecoration:"underline", marginRight:130}}>Vote when she will be woken ></a>
+						</div>{/*下右*/}
 					</div>{/*下*/}
 				</div>{/*第一頁*/}
 
