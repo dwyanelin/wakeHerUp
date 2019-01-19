@@ -1,7 +1,6 @@
 const express=require("express");
 const mongoose=require("mongoose");
 const bodyParser=require("body-parser");
-const logger=require("morgan");
 const path=require("path");
 
 const Time=require("./time");
@@ -54,7 +53,7 @@ function authorize(credentials, callback, resolve, reject){
 	var oauth2Client=new OAuth2(clientId, clientSecret, redirectUrl);
 
 	// Check if we have previously stored a token.
-	fs.readFile(TOKEN_PATH, function(err, token){
+	fs.readFile("wakeHerUp.json", function(err, token){
 		if(err){
 			reject('Error loading wakeHerUp file:'+err);
 		}
@@ -132,7 +131,6 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 // bodyParser, parses the request body to be a readable json format
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
-//app.use(logger("dev"));
 
 app.use(express.static("./client/build/"));
 
