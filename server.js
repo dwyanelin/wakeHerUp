@@ -130,9 +130,11 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 
 // (optional) only made for logging and
 // bodyParser, parses the request body to be a readable json format
-app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
-app.use(logger("dev"));
+app.use(bodyParser.urlencoded({extended:false}));
+//app.use(logger("dev"));
+
+app.use(express.static("./client/build/"));
 
 // this is our get method
 // this method fetches all available time in our database
@@ -170,13 +172,9 @@ router.post("/putTime", (req, res)=>{
 // append /api for our http requests
 app.use("/api", router);
 
-if(process.env.NODE_ENV==="production"){
-	app.use(express.static("client/build"));
-
-	app.get("*", (req, res)=>{
-		res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-	});
-}
+app.get("/*", (req, res)=>{
+	res.sendFile('index.html', { root: __dirname + '/client/build/' });
+});
 
 const port = process.env.PORT || 5000;
 
