@@ -98,88 +98,83 @@ class App extends Component {
 					</div>{/*下*/}
 				</div>{/*第一頁*/}
 
-				<div style={{height:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}}>{/*第二頁*/}
-					<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:15, color:"#fff"}}>{/*上*/}
-						<div style={{lineHeight:"1.3em"}}>‘wake her up’, this project allows audiences to </div>
-						<div style={{lineHeight:"1.3em"}}>decide the time for YC to be awaken by the </div>
-						<div style={{lineHeight:"1.3em"}}>automatically set-up alarm.</div>
-						<div style={{lineHeight:"1.3em"}}>The valid time range to input is from 00:00 am to 07:00 am.</div>
-					</div>{/*上*/}
-					<div style={{display:"flex"}}>{/*下*/}
-						<div style={{flex:1, display:"flex", alignItems:"center"}}>{/*下左*/}
-							<form style={{marginLeft:20, display:"flex", justifyContent:"center", alignItems:"center", width:236, height:67, color:"#fff", font:"normal normal 700 30px/1.4em helvetica-w01-light,sans-serif", border:"2px solid #fff"}} ref="form">
-								<input
-									type="text"
-									onChange={e=>{
-										this.setState({hour:e.target.value});
-										if(e.target.value.length===2){
+				<div style={{height:"100vh", width:970, display:"flex"}}>{/*第二頁*/}
+					<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", fontFamily:"helvetica-w01-light,sans-serif", fontSize:15, color:"#fff"}}>{/*左*/}
+						<span style={{width:242, marginBottom:40}}>Waking up is a private issue for every individual, and by giving away the initiative of deciding when to  wake up to the internet community, truly blends the artist herself into the society, and lets the audiences experience the most intimate dominance over one human being.</span>
+						<span style={{width:242, marginBottom:40}}>By programming the automatic-set-up alarm, the artist will be woken without previously knowing when. Once the artist is woken, she can’t return sleeping; if she wakes earlier than the alarm, she has to stay on the bed till the voted time.</span>
+						<form style={{display:"flex", justifyContent:"center", alignItems:"center", width:236, height:67, color:"#fff", font:"normal normal 700 30px/1.4em helvetica-w01-light,sans-serif", border:"2px solid #fff"}} ref="form">{/*左下*/}
+							<input
+								type="text"
+								onChange={e=>{
+									this.setState({hour:e.target.value});
+									if(e.target.value.length===2){
+										this.refs.minute.focus();
+									}
+								}}
+								placeholder={minute===""?"Type":""}
+								style={{border:0, backgroundColor:"inherit", textAlign:"right", color:"#fff", font:"normal normal 700 30px/1.4em helvetica-w01-light,sans-serif", width:107, height:67}}
+								maxLength="2"
+								ref="hour"
+								onKeyDown={e=>{
+									if(e.keyCode===39&&e.target.selectionStart===hour.length){//Right Arrow
+										setTimeout(()=>{
 											this.refs.minute.focus();
-										}
-									}}
-									placeholder={minute===""?"Type":""}
-									style={{border:0, backgroundColor:"inherit", textAlign:"right", color:"#fff", font:"normal normal 700 30px/1.4em helvetica-w01-light,sans-serif", width:107, height:67}}
-									maxLength="2"
-									ref="hour"
-									onKeyDown={e=>{
-										if(e.keyCode===39&&e.target.selectionStart===hour.length){//Right Arrow
-											setTimeout(()=>{
-												this.refs.minute.focus();
-											}, 1);
-										}
-										if(e.keyCode===13){//enter
-											this.refs.minute.focus();
-										}
-									}}
-								/>
-								<span onClick={()=>this.refs.hour.focus()} style={{height:67, display:"flex", alignItems:"center"}}>&nbsp;:&nbsp;</span>
-								<input
-									type="text"
-									onChange={e=>this.setState({minute:e.target.value})}
-									placeholder={hour===""?"here":""}
-									style={{border:0, backgroundColor:"inherit", textAlign:"left", color:"#fff", font:"normal normal 700 30px/1.4em helvetica-w01-light,sans-serif", width:107, height:67}}
-									maxLength="2"
-									ref="minute"
-									onKeyDown={e=>{
-										if(e.keyCode===37&&e.target.selectionStart===0){//Left Arrow
-											setTimeout(()=>{
-												this.refs.hour.focus();
-											}, 1);
-										}
-										if(e.keyCode===13){
-											this.addTime();
-										}
-										if(e.keyCode===8&&e.target.selectionStart===0){//back
-											setTimeout(()=>{
-												this.refs.hour.focus();
-											}, 1);
-										}
-									}}
-								/>
-							</form>
-						</div>{/*下左*/}
-						<div style={{flex:1, display:"flex", alignItems:"center", minHeight:200}}>
-							<ul>
-								{times.length>0&&times.map((e, i)=>(
-									<li style={{color:"#fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:51, lineHeight:"1em"}} key={i}>
-										{e.time}
-									</li>
-								))}
-							</ul>
-						</div>
-					</div>{/*下*/}
+										}, 1);
+									}
+									if(e.keyCode===13){//enter
+										this.refs.minute.focus();
+									}
+								}}
+							/>
+							<span onClick={()=>this.refs.hour.focus()} style={{height:67, display:"flex", alignItems:"center"}}>&nbsp;:&nbsp;</span>
+							<input
+								type="text"
+								onChange={e=>this.setState({minute:e.target.value})}
+								placeholder={hour===""?"here":""}
+								style={{border:0, backgroundColor:"inherit", textAlign:"left", color:"#fff", font:"normal normal 700 30px/1.4em helvetica-w01-light,sans-serif", width:107, height:67}}
+								maxLength="2"
+								ref="minute"
+								onKeyDown={e=>{
+									if(e.keyCode===37&&e.target.selectionStart===0){//Left Arrow
+										setTimeout(()=>{
+											this.refs.hour.focus();
+										}, 1);
+									}
+									if(e.keyCode===13){
+										this.addTime();
+									}
+									if(e.keyCode===8&&e.target.selectionStart===0){//back
+										setTimeout(()=>{
+											this.refs.hour.focus();
+										}, 1);
+									}
+								}}
+							/>
+						</form>{/*左下*/}
+					</div>{/*左*/}
+					<div style={{flex:1, display:"flex", alignItems:"center"}}>{/*右*/}
+						<ul style={{paddingInlineStart:70}}>
+							{times.length>0&&times.map((e, i)=>(
+								<li style={{color:"#fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:51, lineHeight:"0.9em"}} key={i}>
+									{e.time}
+								</li>
+							))}
+						</ul>
+					</div>{/*右*/}
 				</div>{/*第二頁*/}
 
 				<div style={{minHeight:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}}>{/*第三頁*/}
-					<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:15, color:"#fff", lineHeight:"1.3em", marginBottom:40}}>{/*上*/}
-						Video record from day one to last day
+					<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:16, color:"#fff", lineHeight:"1.3em", marginBottom:40}}>{/*上*/}
+						Video record from the first day to 30th.
 					</div>{/*上*/}
 					<div style={{display:"flex", justifyContent:"center", flexWrap:"wrap"}}>{/*下*/}
-						{videoIds.length<=0
-							?<span style={{color:"#fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:51}}>NO VIDEOS YET</span>
-							:videoIds.map((e, i)=>{
-								return (<YouTube videoId={e} opts={opts} onError={()=>{}} key={i} containerClassName={"youtube"}/>);
-							})
-						}
+						{videoIds.length>0&&videoIds.map((e, i)=>(
+							<div stlye={{width:220, height:246, border:"2px solid #fff"}}>
+								<YouTube videoId={e} opts={opts} onError={()=>{}} key={i} containerClassName={"youtube"}/>
+								<div>Day {i+1}</div>
+								<div>{alarm}</div>{/*存每天的候選人跟選上的，然後抓出來顯示在這，還要做紀錄新頁面*/}
+							</div>
+						))}
 					</div>{/*下*/}
 				</div>{/*第三頁*/}
 			</div>
