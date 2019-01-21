@@ -22,6 +22,8 @@ class App extends Component {
 		intervalIsSet:false,
 	};
 
+	secondPage=React.createRef();
+
 	// when component mounts, first thing it does is fetch all existing time in our db
 	// then we incorporate a polling logic so that we can easily see if our db has
 	// changed and implement those changes into our UI
@@ -93,12 +95,12 @@ class App extends Component {
 								<div>starts from</div>
 								<div>00:00.</div>
 							</div>
-							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, cursor:"pointer", textDecoration:"underline", marginRight:130}}>Vote when she will be woken ></a>
+							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, cursor:"pointer", textDecoration:"underline", marginRight:130}} onClick={()=>window.scrollTo({top:this.secondPage.current.offsetTop, behavior:'smooth'})}>Vote when she will be woken ></a>
 						</div>{/*下右*/}
 					</div>{/*下*/}
 				</div>{/*第一頁*/}
 
-				<div style={{height:"100vh", width:970, display:"flex"}}>{/*第二頁*/}
+				<div style={{height:"100vh", width:970, display:"flex"}} ref={this.secondPage}>{/*第二頁*/}
 					<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", fontFamily:"helvetica-w01-light,sans-serif", fontSize:15, color:"#fff"}}>{/*左*/}
 						<span style={{width:242, marginBottom:40}}>Waking up is a private issue for every individual, and by giving away the initiative of deciding when to  wake up to the internet community, truly blends the artist herself into the society, and lets the audiences experience the most intimate dominance over one human being.</span>
 						<span style={{width:242, marginBottom:40}}>By programming the automatic-set-up alarm, the artist will be woken without previously knowing when. Once the artist is woken, she can’t return sleeping; if she wakes earlier than the alarm, she has to stay on the bed till the voted time.</span>
