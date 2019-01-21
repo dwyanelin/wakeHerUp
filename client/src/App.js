@@ -35,7 +35,7 @@ class alarm extends Component{
 
 	componentDidMount(){
 		const {seconds}=this.state;
-		fetch("/api/getAlarm")
+		/*fetch("/api/getAlarm")
 			.then(res=>res.json())
 			.then(res=>{
 				this.setState({alarm:res.alarm});
@@ -47,12 +47,11 @@ class alarm extends Component{
 				let dAlarm=new Date();
 				dAlarm.setSeconds(t);
 				setTimeout(()=>{
-					this.youtube.seekTo(seconds);
+					this.youtube.seekTo(28);
 					this.setState({playing:true});
-					setTimeout(()=>this.setState({playing:false}), 8000);
 				}, dAlarm-d);
 			})
-			.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
+			.catch(error=>console.log("Home.componentDidMount.getAlarm", error));*/
 
 		schedule.scheduleJob('5 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 			fetch("/api/getAlarm")
@@ -68,9 +67,8 @@ class alarm extends Component{
 					let dAlarm=new Date();
 					dAlarm.setSeconds(t);
 					setTimeout(()=>{
-						this.youtube.seekTo(seconds);
+						this.youtube.seekTo(28);
 						this.setState({playing:true});
-						setTimeout(()=>this.setState({playing:false}), 8000);
 					}, dAlarm-d);
 				})
 				.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
@@ -84,7 +82,7 @@ class alarm extends Component{
 				<div style={{width:640, height:360, backgroundColor:"rgba(0,0,0,.1)"}}>
 					<YouTubePlayer
 						ref={ref=>this.youtube=ref}
-						url={url}
+						url={"https://www.youtube.com/watch?v=LDU_Txk06tM"}
 						playing={playing}
 						controls
 						width="100%"
@@ -94,7 +92,7 @@ class alarm extends Component{
 						onEnded={()=>this.setState({playing:false})}
 					/>
 				</div>
-				<div style={{margin:10}}>
+				{/*<div style={{margin:10}}>
 					<span>Control </span>
 					<button onClick={()=>this.setState({playing:!playing})}>{playing?'Pause':'Play'}</button>
 				</div>
@@ -104,7 +102,7 @@ class alarm extends Component{
 					<input ref={ref=>{this.url=ref}} type='text' placeholder='Enter url' style={{width:400}}/>
 					<button onClick={()=>{
 						this.setState({url:this.url.value, playing:false});
-						this.youtube.seekTo(seconds);
+						this.youtube.seekTo(28);
 					}}>Load</button>
 				</div>
 
@@ -116,7 +114,7 @@ class alarm extends Component{
 
 				<div style={{margin:10}}>
 					<span>Now {seconds}</span>
-				</div>
+				</div>*/}
 			</div>
 		);
 	}
