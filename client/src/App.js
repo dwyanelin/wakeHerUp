@@ -32,10 +32,10 @@ class App extends Component {
 			this.setState({intervalIsSet:interval});
 		}
 
-		/*fetch("/api/getYoutube")
+		fetch("/api/getYoutube")
 			.then(video=>video.json())
 			.then(res=>res.videoIds&&this.setState({videoIds:res.videoIds}))
-			.catch(error=>console.log("App.componentDidMount.getYoutube", error));*/
+			.catch(error=>console.log("App.componentDidMount.getYoutube", error));
 
 		fetch("/api/getAlarm")
 			.then(res=>res.json())
@@ -70,8 +70,8 @@ class App extends Component {
 		alarmDateEnd.setSeconds(0);
 		var now=new Date();
 		const opts={
-			height:'253',
-			width:'227'
+			height:'246',
+			width:'220'
 		};
 		return (
 			<div style={{backgroundImage:`url(${Background})`, backgroundSize:"100vw", backgroundAttachment:"fixed", backgroundPosition:"center", display:"flex", flexDirection:"column", alignItems:"center"}}>
@@ -167,12 +167,12 @@ class App extends Component {
 					<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:16, color:"#fff", lineHeight:"1.3em", marginBottom:40}}>{/*上*/}
 						Video record from the first day to 30th.
 					</div>{/*上*/}
-					<div style={{display:"flex", justifyContent:"center", flexWrap:"wrap"}}>{/*下*/}
+					<div style={{display:"flex", justifyContent:"space-between", flexWrap:"wrap"}}>{/*下*/}
 						{videoIds.length>0&&videoIds.map((e, i)=>(
-							<div stlye={{width:220, height:246, border:"2px solid #fff"}}>
-								<YouTube videoId={e} opts={opts} onError={()=>{}} key={i} containerClassName={"youtube"}/>
-								<div>Day {i+1}</div>
-								<div>{alarm}</div>{/*存每天的候選人跟選上的，然後抓出來顯示在這，還要做紀錄新頁面*/}
+							<div style={{width:220, height:246, border:"2px solid #fff", marginBottom:20}}>
+								<YouTube videoId={e} opts={opts} onError={error=>console.log(error)} key={i}/>
+								{/*<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold"}}>Day {i+1}</div>
+								<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold"}}>{alarm}</div>存每天的候選人跟選上的，然後抓出來顯示在這，還要做紀錄新頁面*/}
 							</div>
 						))}
 					</div>{/*下*/}

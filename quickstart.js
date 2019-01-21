@@ -8,7 +8,8 @@ var OAuth2=google.auth.OAuth2;
 var SCOPES=['https://www.googleapis.com/auth/youtube.readonly'];
 var TOKEN_DIR=(process.env.HOME || process.env.HOMEPATH ||
 		process.env.USERPROFILE)+'/.credentials/';
-var TOKEN_PATH=TOKEN_DIR+'wakeHerUp.json';
+//var TOKEN_PATH=TOKEN_DIR+'wakeHerUp.json';
+var TOKEN_PATH='wakeHerUp.json';
 
 // Load client secrets from a local file.
 fs.readFile('client_secret.json', function processClientSecrets(err, content){
