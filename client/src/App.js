@@ -1,7 +1,9 @@
 // /client/App.js
 import React, {Component} from "react";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import axios from "axios";
 import YouTube from 'react-youtube';//https://www.npmjs.com/package/react-youtube
+import YouTubePlayer from 'react-player/lib/players/YouTube';
 import Cookies from 'universal-cookie';
 
 import './css/wakeHerUp.css';
@@ -11,7 +13,124 @@ const {DateTime} = require("luxon");
 
 var schedule=require('node-schedule');
 
-class App extends Component {
+function App(){
+	return (
+		<Router>
+			<div>
+				<Route exact path="/" component={Home} />
+				<Route path="/alarm" component={alarm} />
+				<Route path="/records" component={records} />
+			</div>
+		</Router>
+	);
+}
+
+class alarm extends Component{
+	state={
+		alarm:"",
+		url:null,
+		playing:false,
+		seconds:0,
+	};
+
+	componentDidMount(){
+		const {seconds}=this.state;
+		fetch("/api/getAlarm")
+			.then(res=>res.json())
+			.then(res=>{
+				this.setState({alarm:res.alarm});
+				let t=res.alarm.split(":")[1];
+				if(t<10){
+					t=10;
+				}
+				let d=new Date();
+				let dAlarm=new Date();
+				dAlarm.setSeconds(t);
+				setTimeout(()=>{
+					this.youtube.seekTo(seconds);
+					this.setState({playing:true});
+					setTimeout(()=>this.setState({playing:false}), 8000);
+				}, dAlarm-d);
+			})
+			.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
+
+		schedule.scheduleJob('5 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+			fetch("/api/getAlarm")
+				.then(res=>res.json())
+				.then(res=>{
+					console.log(res);
+					this.setState({alarm:res.alarm});
+					let t=res.alarm.split(":")[1];
+					if(t<10){
+						t=10;
+					}
+					let d=new Date();
+					let dAlarm=new Date();
+					dAlarm.setSeconds(t);
+					setTimeout(()=>{
+						this.youtube.seekTo(seconds);
+						this.setState({playing:true});
+						setTimeout(()=>this.setState({playing:false}), 8000);
+					}, dAlarm-d);
+				})
+				.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
+		});//run everyday 00:00
+	}
+
+	render(){
+		const {url, playing, seconds}=this.state;
+		return (
+			<div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", fontFamily:"helvetica-w01-bold,sans-serif", margin:50}}>
+				<div style={{width:640, height:360, backgroundColor:"rgba(0,0,0,.1)"}}>
+					<YouTubePlayer
+						ref={ref=>this.youtube=ref}
+						url={url}
+						playing={playing}
+						controls
+						width="100%"
+						height="100%"
+						onPlay={()=>this.setState({playing:true})}
+						onPause={()=>this.setState({playing:false})}
+						onEnded={()=>this.setState({playing:false})}
+					/>
+				</div>
+				<div style={{margin:10}}>
+					<span>Control </span>
+					<button onClick={()=>this.setState({playing:!playing})}>{playing?'Pause':'Play'}</button>
+				</div>
+
+				<div style={{margin:10}}>
+					<span>Url </span>
+					<input ref={ref=>{this.url=ref}} type='text' placeholder='Enter url' style={{width:400}}/>
+					<button onClick={()=>{
+						this.setState({url:this.url.value, playing:false});
+						this.youtube.seekTo(seconds);
+					}}>Load</button>
+				</div>
+
+				<div style={{margin:10}}>
+					<span>Seconds </span>
+					<input ref={ref=>{this.seconds=ref}} type='text' placeholder='Enter seconds' style={{width:100}}/>
+					<button onClick={()=>this.setState({seconds:parseFloat(this.seconds.value)})}>Set</button>
+				</div>
+
+				<div style={{margin:10}}>
+					<span>Now {seconds}</span>
+				</div>
+			</div>
+		);
+	}
+}
+
+function records(){
+	return (
+		<div>
+			<h2>records</h2>
+		</div>
+	);
+}
+
+class Home extends Component {
 	// initialize our state
 	state={
 		alarm:"",
@@ -27,9 +146,9 @@ class App extends Component {
 	// when component mounts, first thing it does is fetch all existing time in our db
 	// then we incorporate a polling logic so that we can easily see if our db has
 	// changed and implement those changes into our UI
-	componentDidMount() {
+	componentDidMount(){
 		this.getTimeFromDB();
-		if (!this.state.intervalIsSet) {
+		if (!this.state.intervalIsSet){
 			let interval=setInterval(this.getTimeFromDB, 1000);
 			this.setState({intervalIsSet:interval});
 		}
@@ -37,25 +156,25 @@ class App extends Component {
 		fetch("/api/getYoutube")
 			.then(video=>video.json())
 			.then(res=>res.videoIds&&this.setState({videoIds:res.videoIds}))
-			.catch(error=>console.log("App.componentDidMount.getYoutube", error));
+			.catch(error=>console.log("Home.componentDidMount.getYoutube", error));
 
 		fetch("/api/getAlarm")
 			.then(res=>res.json())
 			.then(res=>this.setState({alarm:res.alarm}))
-			.catch(error=>console.log("App.componentDidMount.getAlarm", error));
+			.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
 
 		schedule.scheduleJob('5 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 			fetch("/api/getAlarm")
 				.then(res=>res.json())
 				.then(res=>{console.log(res);this.setState({alarm:res.alarm})})
-				.catch(error=>console.log("App.componentDidMount.schedule.getAlarm", error));
+				.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
 		});//run everyday 00:00
 	}
 
 	// never let a process live forever
 	// always kill a process everytime we are done using it
-	componentWillUnmount() {
-		if (this.state.intervalIsSet) {
+	componentWillUnmount(){
+		if (this.state.intervalIsSet){
 			clearInterval(this.state.intervalIsSet);
 			this.setState({intervalIsSet:null});
 		}
@@ -64,7 +183,7 @@ class App extends Component {
 	// here is our UI
 	// it is easy to understand their functions when you
 	// see them render into our screen
-	render() {
+	render(){
 		const {alarm, hour, minute, times, videoIds}=this.state;
 		var alarmDateEnd=new Date();
 		alarmDateEnd.setHours(alarm.split(":")[0]);
@@ -102,7 +221,7 @@ class App extends Component {
 
 				<div style={{height:"100vh", width:970, display:"flex"}} ref={this.secondPage}>{/*第二頁*/}
 					<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", fontFamily:"helvetica-w01-light,sans-serif", fontSize:15, color:"#fff"}}>{/*左*/}
-						<span style={{width:242, marginBottom:40}}>Waking up is a private issue for every individual, and by giving away the initiative of deciding when to  wake up to the internet community, truly blends the artist herself into the society, and lets the audiences experience the most intimate dominance over one human being.</span>
+						<span style={{width:242, marginBottom:40}}>Waking up is a private issue for every individual, and by giving away the initiative of deciding when to	wake up to the internet community, truly blends the artist herself into the society, and lets the audiences experience the most intimate dominance over one human being.</span>
 						<span style={{width:242, marginBottom:40}}>By programming the automatic-set-up alarm, the artist will be woken without previously knowing when. Once the artist is woken, she can’t return sleeping; if she wakes earlier than the alarm, she has to stay on the bed till the voted time.</span>
 						<form style={{display:"flex", justifyContent:"center", alignItems:"center", width:236, height:67, color:"#fff", font:"normal normal 700 30px/1.4em helvetica-w01-light,sans-serif", border:"2px solid #fff"}} ref="form">{/*左下*/}
 							<input
@@ -173,8 +292,6 @@ class App extends Component {
 						{videoIds.length>0&&videoIds.map((e, i)=>(
 							<div style={{width:220, height:246, border:"2px solid #fff", marginBottom:20}}>
 								<YouTube videoId={e} opts={opts} onError={error=>console.log(error)} key={i}/>
-								{/*<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold"}}>Day {i+1}</div>
-								<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold"}}>{alarm}</div>存每天的候選人跟選上的，然後抓出來顯示在這，還要做紀錄新頁面*/}
 							</div>
 						))}
 					</div>{/*下*/}
