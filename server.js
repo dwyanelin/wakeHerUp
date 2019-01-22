@@ -224,6 +224,10 @@ app.listen(port, ()=>{
 		content+="選到的時間："+alarm+"\n";
 		content+="所有的時間："+times.map(e=>e.time).join(", ")+"\n";
 		fs.readdir("records", (err, files)=>{//count records directory files number, to determine file name
+			if(files===undefined){//git下如果該資料夾下無檔案，會把資料夾整個刪掉，所以沒檔時要先創資料夾再寫檔
+				files=[];
+				fs.mkdirSync("records");
+			}
 			fs.writeFile("records/Day "+(files.length+1)+".txt", content, error=>{
 				if(error) throw error;
 			});
