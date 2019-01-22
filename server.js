@@ -162,6 +162,10 @@ router.get("/getRecords", (req, res)=>{
 			return;
 		}
 
+		if(fileNames===undefined){
+			fileNames=[];
+		}
+
 		return res.json(
 			await Promise.all(fileNames.map(fileName=>
 				readFile(dirName+"/"+fileName, "utf8")
