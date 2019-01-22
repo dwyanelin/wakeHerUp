@@ -157,10 +157,10 @@ router.get("/getAlarm", (req, res)=>{
 router.get("/getRecords", (req, res)=>{
 	let dirName="records";
 	fs.readdir(dirName, async (err, fileNames)=>{
-		if(err){
+		/*if(err){
 			console.log("server.getRecords.readdir:", err);
 			return;
-		}
+		}*/
 
 		if(fileNames===undefined){
 			fileNames=[];
