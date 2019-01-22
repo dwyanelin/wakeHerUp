@@ -10,11 +10,14 @@ const router=express.Router();
 
 var schedule=require('node-schedule');
 
+const {promisify}=require('util');
+var fs=require('fs');
+const readFile=promisify(fs.readFile);
+
 let alarm="07:00";
 
 /******************** google api youtube ********************/
 //https://developers.google.com/youtube/v3/quickstart/nodejs
-var fs=require('fs');
 var readline=require('readline');
 var {google}=require('googleapis');
 var OAuth2=google.auth.OAuth2;
@@ -151,6 +154,25 @@ router.get("/getYoutube", (req, res)=>{
 // this method simply return alarm time
 router.get("/getAlarm", (req, res)=>{
 	return res.json({success:true, alarm});
+});
+router.get("/getRecords", (req, res)=>{
+	let dirName="records";
+	fs.readdir(dirName, async (err, fileNames)=>{
+		if(err){
+			console.log("server.getRecords.readdir:", err);
+			return;
+		}
+
+		return res.json(
+			await Promise.all(fileNames.map(fileName=>
+				readFile(dirName+"/"+fileName, "utf8")
+				.then(content=>({fileName, content}))
+				.catch(error=>console.log("server.getRecords.readFile", error))
+			))
+			.then(files=>files)
+			.catch(error=>console.log("server.getRecords.Promise.all", error))
+		);
+	});
 });
 
 // this is our create methid

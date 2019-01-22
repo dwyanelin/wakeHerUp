@@ -1,2 +1,2 @@
 # wakeHerUp
-看妹子起床
+Determine her wake up time.
