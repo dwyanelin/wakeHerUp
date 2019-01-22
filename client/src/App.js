@@ -35,44 +35,50 @@ class alarm extends Component{
 
 	componentDidMount(){
 		const {seconds}=this.state;
-		/*fetch("/api/getAlarm")
+
+		//get alarm clock when entering the alarm page.
+		fetch("/api/getAlarm")
+		.then(res=>res.json())
+		.then(res=>{
+			this.setState({alarm:res.alarm});
+			let temp=res.alarm.split(":");
+			let hour=+temp[0];
+			let minute=+temp[1];
+			let d=new Date();
+			let dAlarm=new Date();
+			dAlarm.setHours(hour);//設定今天鬧鐘時間
+			dAlarm.setMinutes(minute);
+			if(dAlarm>d){//鬧鐘時間比較大=時間未到，再設定到時候開播youtube，過了就別設定了，不然會馬上響
+				setTimeout(()=>{
+					this.youtube.seekTo(28);
+					this.setState({playing:true});
+				}, dAlarm-d);
+			}
+		})
+		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
+
+		//get new alarm clock every midnight.
+		schedule.scheduleJob('0 0 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+			fetch("/api/getAlarm")
 			.then(res=>res.json())
 			.then(res=>{
+				console.log(res);
 				this.setState({alarm:res.alarm});
-				let t=res.alarm.split(":")[1];
-				if(t<10){
-					t=10;
-				}
+				let temp=res.alarm.split(":");
+				let hour=+temp[0];
+				let minute=+temp[1];
 				let d=new Date();
 				let dAlarm=new Date();
-				dAlarm.setSeconds(t);
+				dAlarm.setHours(hour);//設定今天鬧鐘時間
+				dAlarm.setMinutes(minute);
+				//如果剛好回傳比較慢，又抽到例如00:00，setTimeout負的時間就會馬上執行
 				setTimeout(()=>{
 					this.youtube.seekTo(28);
 					this.setState({playing:true});
 				}, dAlarm-d);
 			})
-			.catch(error=>console.log("Home.componentDidMount.getAlarm", error));*/
-
-		schedule.scheduleJob('5 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
-			fetch("/api/getAlarm")
-				.then(res=>res.json())
-				.then(res=>{
-					console.log(res);
-					this.setState({alarm:res.alarm});
-					let t=res.alarm.split(":")[1];
-					if(t<10){
-						t=10;
-					}
-					let d=new Date();
-					let dAlarm=new Date();
-					dAlarm.setSeconds(t);
-					setTimeout(()=>{
-						this.youtube.seekTo(28);
-						this.setState({playing:true});
-					}, dAlarm-d);
-				})
-				.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
-		});//run everyday 00:00
+			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
+		});
 	}
 
 	render(){
@@ -127,9 +133,9 @@ class records extends Component{
 
 	componentDidMount(){
 		fetch("/api/getRecords")
-			.then(res=>res.json())
-			.then(res=>this.setState({files:res}))
-			.catch(error=>console.log("records.componentDidMount.getRecords", error));
+		.then(res=>res.json())
+		.then(res=>this.setState({files:res}))
+		.catch(error=>console.log("records.componentDidMount.getRecords", error));
 	}
 
 	render(){
@@ -147,7 +153,6 @@ class records extends Component{
 }
 
 class Home extends Component{
-	// initialize our state
 	state={
 		alarm:"",
 		hour:"",
@@ -159,9 +164,6 @@ class Home extends Component{
 
 	secondPage=React.createRef();
 
-	// when component mounts, first thing it does is fetch all existing time in our db
-	// then we incorporate a polling logic so that we can easily see if our db has
-	// changed and implement those changes into our UI
 	componentDidMount(){
 		this.getTimeFromDB();
 		if (!this.state.intervalIsSet){
@@ -170,25 +172,23 @@ class Home extends Component{
 		}
 
 		fetch("/api/getYoutube")
-			.then(video=>video.json())
-			.then(res=>res.videoIds&&this.setState({videoIds:res.videoIds}))
-			.catch(error=>console.log("Home.componentDidMount.getYoutube", error));
+		.then(video=>video.json())
+		.then(res=>res.videoIds&&this.setState({videoIds:res.videoIds}))
+		.catch(error=>console.log("Home.componentDidMount.getYoutube", error));
 
 		fetch("/api/getAlarm")
-			.then(res=>res.json())
-			.then(res=>this.setState({alarm:res.alarm}))
-			.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
+		.then(res=>res.json())
+		.then(res=>this.setState({alarm:res.alarm}))
+		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
 
-		schedule.scheduleJob('5 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+		schedule.scheduleJob('0 0 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 			fetch("/api/getAlarm")
-				.then(res=>res.json())
-				.then(res=>{console.log(res);this.setState({alarm:res.alarm})})
-				.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
+			.then(res=>res.json())
+			.then(res=>{console.log(res);this.setState({alarm:res.alarm})})
+			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
 		});//run everyday 00:00
 	}
 
-	// never let a process live forever
-	// always kill a process everytime we are done using it
 	componentWillUnmount(){
 		if (this.state.intervalIsSet){
 			clearInterval(this.state.intervalIsSet);
@@ -196,9 +196,6 @@ class Home extends Component{
 		}
 	}
 
-	// here is our UI
-	// it is easy to understand their functions when you
-	// see them render into our screen
 	render(){
 		const {alarm, hour, minute, times, videoIds}=this.state;
 		var alarmDateEnd=new Date();
@@ -318,8 +315,8 @@ class Home extends Component{
 
 	getTimeFromDB=()=>{
 		fetch("/api/getTime")
-			.then(time=>time.json())
-			.then(res=>res.data&&this.setState({times:res.data}));
+		.then(time=>time.json())
+		.then(res=>res.data&&this.setState({times:res.data}));
 	};
 
 	addLock=false;
@@ -359,8 +356,7 @@ class Home extends Component{
 		//formalize
 
 		const cookies = new Cookies();
-		////var alreadyAdd=cookies.get('alreadyAdd');console.log(alreadyAdd);
-		var alreadyAdd=undefined;
+		var alreadyAdd=cookies.get('alreadyAdd');
 		if(alreadyAdd===undefined){//今天還沒加
 			let result=await axios.post("/api/putTime", {time});
 			if(result.data.success===true){

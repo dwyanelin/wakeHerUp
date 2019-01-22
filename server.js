@@ -87,7 +87,6 @@ function getChannel(auth, resolve, reject){
 			reject('No channel found.');
 		}
 		else{
-			console.log(channels);
 			service.playlistItems.list({
 				auth:auth,
 				part:'snippet',
@@ -148,8 +147,8 @@ router.get("/getTime", (req, res)=>{
 // this method authorize youtube and get video list
 router.get("/getYoutube", (req, res)=>{
 	return getYoutube()
-		.then(videoIds=>res.json({success:true, videoIds}))
-		.catch(error=>console.log("server.router.getYoutube:", error));
+	.then(videoIds=>res.json({success:true, videoIds}))
+	.catch(error=>console.log("server.router.getYoutube:", error));
 });
 // this method simply return alarm time
 router.get("/getAlarm", (req, res)=>{
@@ -203,7 +202,7 @@ app.listen(port, ()=>{
 	console.log(`LISTENING ON PORT ${port}`);
 
 	//node-schedule
-	var j=schedule.scheduleJob('0 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+	var j=schedule.scheduleJob('59 23 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 		//取
 		let times=await Time.find((err, data)=>{//[{time:""}, {time:""}]
 			if(err) console.log("server.listen:", err);
@@ -216,26 +215,23 @@ app.listen(port, ()=>{
 		else{
 			alarm=times[Math.floor(Math.random()*times.length)].time;
 		}
-		console.log("選到的時間："+alarm);
 		//寫
 		let d=new Date();
 		let year=d.getFullYear();
 		let month=(d.getMonth()+1)<10?"0"+(d.getMonth()+1):d.getMonth()+1;
 		let date=d.getDate()<10?"0"+d.getDate()<10:d.getDate()<10;
-		let minutes=d.getMinutes();////測試用
 		let content=d+"\n";
 		content+="選到的時間："+alarm+"\n";
 		content+="所有的時間："+times.map(e=>e.time).join(", ")+"\n";
-		fs.writeFile("./records/record_"+minutes+".txt", content, error=>{////檔名要改年月日
-			if(error) throw error;
-			console.log(d+' record stored.');
+		fs.readdir("records", (err, files)=>{//count records directory files number, to determine file name
+			fs.writeFile("records/Day "+(files.length+1)+".txt", content, error=>{
+				if(error) throw error;
+			});
 		});
 		//刪
 		let deleteMany=await Time.deleteMany({}, error=>{
 			if(error) throw error;
-			console.log('all times deleted.');
 		});
-		console.log("deleteMany:", deleteMany);
 	});//run everyday 23:59
 	//node-schedule
 });
