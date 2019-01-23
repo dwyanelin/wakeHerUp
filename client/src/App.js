@@ -208,12 +208,12 @@ class Home extends Component{
 			width:'220'
 		};
 		return (
-			<div style={{backgroundImage:`url(${Background})`, backgroundSize:"100vw", backgroundAttachment:"fixed", backgroundPosition:"center", display:"flex", flexDirection:"column", alignItems:"center"}}>
-				<div style={{height:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}}>{/*第一頁*/}
+			<div style={{backgroundImage:`url(${Background})`, backgroundSize:"cover", backgroundAttachment:"fixed", backgroundPosition:"center", display:"flex", flexDirection:"column", alignItems:"center"}}>
+				<div style={{minHeight:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}} className="narrowScreenWidth narrowScreenBottom">{/*第一頁*/}
 					<div style={{marginRight:20, marginBottom:40, textAlign:"right", fontFamily:"helvetica-w01-light,sans-serif", fontSize:73, color:"#fff"}}>{/*上*/}
 						{alarm===""?alarm:alarmDateEnd>now?alarm:""}
 					</div>{/*上*/}
-					<div style={{display:"flex"}}>{/*下*/}
+					<div style={{display:"flex"}} className="narrowScreen">{/*下*/}
 						<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-start"}}>{/*下左*/}
 							<div style={{marginBottom:20, fontFamily:"helvetica-w01-bold,sans-serif", fontSize:134, color:"#fff"}}>
 								<div style={{lineHeight:"0.6em"}}>wake</div>
@@ -232,7 +232,7 @@ class Home extends Component{
 					</div>{/*下*/}
 				</div>{/*第一頁*/}
 
-				<div style={{height:"100vh", width:970, display:"flex"}} ref={this.secondPage}>{/*第二頁*/}
+				<div style={{minHeight:"100vh", width:970, display:"flex"}} className="narrowScreen narrowScreenWidth narrowScreenBottom" ref={this.secondPage}>{/*第二頁*/}
 					<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", fontFamily:"helvetica-w01-light,sans-serif", fontSize:15, color:"#fff"}}>{/*左*/}
 						<span style={{width:242, marginBottom:40}}>Waking up is a private issue for every individual, and by giving away the initiative of deciding when to	wake up to the internet community, truly blends the artist herself into the society, and lets the audiences experience the most intimate dominance over one human being.</span>
 						<span style={{width:242, marginBottom:40}}>By programming the automatic-set-up alarm, the artist will be woken without previously knowing when. Once the artist is woken, she can’t return sleeping; if she wakes earlier than the alarm, she has to stay on the bed till the voted time.</span>
@@ -287,9 +287,9 @@ class Home extends Component{
 						</form>{/*左下*/}
 					</div>{/*左*/}
 					<div style={{flex:1, display:"flex", alignItems:"center"}}>{/*右*/}
-						<ul style={{paddingInlineStart:70}}>
+						<ul className="wideScreenTime narrowScreenTime">
 							{times.length>0&&times.map((e, i)=>(
-								<li style={{color:"#fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:51, lineHeight:"0.9em"}} key={i}>
+								<li className="narrowScreenTime" style={{paddingInlineStart:70, color:"#fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:51, lineHeight:"0.9em"}} key={i}>
 									{e.time}
 								</li>
 							))}
@@ -297,7 +297,7 @@ class Home extends Component{
 					</div>{/*右*/}
 				</div>{/*第二頁*/}
 
-				<div style={{minHeight:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}}>{/*第三頁*/}
+				<div style={{minHeight:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}} className="narrowScreenWidth">{/*第三頁*/}
 					<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:16, color:"#fff", lineHeight:"1.3em", marginBottom:40}}>{/*上*/}
 						Video record from the first day to 30th.
 					</div>{/*上*/}

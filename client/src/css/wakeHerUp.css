@@ -37,7 +37,7 @@ body{
 }
 
 ul{
-  list-style-type:none;
+	list-style-type:none;
 }
 
 .youtube{
@@ -45,5 +45,30 @@ ul{
 }
 
 *:focus{
-    outline:none;
+	outline:none;
+}
+
+@media(min-width:992px){
+	.wideScreenTime{
+		display:flex;
+		flex-direction:column;
+		flex-wrap:wrap;
+		max-height:750px;
+	}
+}
+
+@media(max-width:991px){
+	.narrowScreen{
+		flex-direction:column;
+		align-items:center;
+	}
+	.narrowScreenWidth{
+		width:auto !important;
+	}
+	.narrowScreenBottom{
+		margin-bottom:50px;
+	}
+	.narrowScreenTime{
+		padding-inline-start:0 !important;
+	}
 }
