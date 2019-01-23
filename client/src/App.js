@@ -154,19 +154,27 @@ class records extends Component{
 
 class Home extends Component{
 	state={
+		liveId:null,
 		alarm:"",
 		hour:"",
 		minute:"",
 		times:[],
 		videoIds:[],
+		intervalIsSetYoutube:false,
 		intervalIsSet:false,
 	};
 
 	secondPage=React.createRef();
 
 	componentDidMount(){
+		this.getLive();
+		if(!this.state.intervalIsSetYoutube){
+			let intervalYoutube=setInterval(this.getLive, 5000);
+			this.setState({intervalIsSetYoutube:intervalYoutube});
+		}
+
 		this.getTimeFromDB();
-		if (!this.state.intervalIsSet){
+		if(!this.state.intervalIsSet){
 			let interval=setInterval(this.getTimeFromDB, 1000);
 			this.setState({intervalIsSet:interval});
 		}
@@ -190,14 +198,19 @@ class Home extends Component{
 	}
 
 	componentWillUnmount(){
-		if (this.state.intervalIsSet){
+		if(this.state.intervalIsSetYoutube){
+			clearInterval(this.state.intervalIsSetYoutube);
+			this.setState({intervalIsSetYoutube:null});
+		}
+
+		if(this.state.intervalIsSet){
 			clearInterval(this.state.intervalIsSet);
 			this.setState({intervalIsSet:null});
 		}
 	}
 
 	render(){
-		const {alarm, hour, minute, times, videoIds}=this.state;
+		const {liveId, alarm, hour, minute, times, videoIds}=this.state;
 		var alarmDateEnd=new Date();
 		alarmDateEnd.setHours(alarm.split(":")[0]);
 		alarmDateEnd.setMinutes(+alarm.split(":")[1]+1);
@@ -222,10 +235,17 @@ class Home extends Component{
 							<div style={{fontFamily:"helvetica-w01-bold,sans-serif", fontSize:20, color:"#fff", marginLeft:10}}>30 days performance</div>
 						</div>{/*下左*/}
 						<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-end"}}>{/*下右*/}
-							<div style={{width:368, height:195, border:"2px solid #fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold", paddingTop:195, paddingLeft:20, marginBottom:20}}>
-								<div>Live stream</div>
+							<div style={{width:388, height:390, border:"2px solid #fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold", marginBottom:20}}>
+								{liveId!==null?<YouTubePlayer
+									url={"https://www.youtube.com/watch?v="+liveId}
+									playing
+									controls
+									width="100%"
+									height="100%"
+								/>
+								:(<div style={{paddingTop:195, paddingLeft:20}}><div>Live stream</div>
 								<div>starts from</div>
-								<div>00:00.</div>
+								<div>00:00.</div></div>)}
 							</div>
 							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, cursor:"pointer", textDecoration:"underline", marginRight:130}} onClick={()=>window.scrollTo({top:this.secondPage.current.offsetTop, behavior:'smooth'})}>Vote when she will be woken ></a>
 						</div>{/*下右*/}
@@ -312,6 +332,16 @@ class Home extends Component{
 			</div>
 		);
 	}
+
+	getLive=()=>{
+		fetch("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCXSSPYopvia4HRGfK-ImX9w&eventType=live&type=video&key=AIzaSyACeRvnmXJ_fD8AA0da-nJ-Vv4e6ExRL-8")
+		.then(res=>res.json())
+		.then(result=>{
+			if(result.items.length>0){
+				this.setState({liveId:result.items[0].id.videoId});
+			}
+		});
+	};
 
 	getTimeFromDB=()=>{
 		fetch("/api/getTime")
