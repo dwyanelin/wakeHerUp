@@ -77,7 +77,7 @@ function getChannel(auth, resolve, reject){
 	service.channels.list({
 		auth:auth,
 		part:'contentDetails',
-		id:'UCXSSPYopvia4HRGfK-ImX9w'
+		id:'UCpnZDChii8ilPTOec5BF7Kg'
 	}, function(err, response){
 		if(err){
 			reject('The API returned an error:'+err);

@@ -334,7 +334,7 @@ class Home extends Component{
 	}
 
 	getLive=()=>{
-		fetch("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCXSSPYopvia4HRGfK-ImX9w&eventType=live&type=video&key=AIzaSyACeRvnmXJ_fD8AA0da-nJ-Vv4e6ExRL-8")
+		fetch("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCpnZDChii8ilPTOec5BF7Kg&eventType=live&type=video&key=AIzaSyACeRvnmXJ_fD8AA0da-nJ-Vv4e6ExRL-8")
 		.then(res=>res.json())
 		.then(result=>{
 			if(result.items.length>0){
