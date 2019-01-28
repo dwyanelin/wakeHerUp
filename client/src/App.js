@@ -34,6 +34,11 @@ class alarm extends Component{
 	};
 
 	componentDidMount(){
+		fetch("/api/getServerTime")
+		.then(res=>res.json())
+		.then(res=>console.log(res))
+		.catch(error=>console.log(error));
+
 		const {seconds}=this.state;
 
 		//get alarm clock when entering the alarm page.
@@ -168,6 +173,11 @@ class Home extends Component{
 	secondPage=React.createRef();
 
 	componentDidMount(){
+		fetch("/api/getServerTime")
+		.then(res=>res.json())
+		.then(res=>console.log(res))
+		.catch(error=>console.log(error));
+
 		this.getLive();
 		if(!this.state.intervalIsSetYoutube){
 			let intervalYoutube=setInterval(this.getLive, 5000);

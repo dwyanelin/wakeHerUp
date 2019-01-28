@@ -177,6 +177,9 @@ router.get("/getRecords", (req, res)=>{
 		);
 	});
 });
+router.get("getServerTime", (req, res)=>{
+	return res.json(new Date());
+});
 
 // this is our create methid
 // this method adds new time in our database
