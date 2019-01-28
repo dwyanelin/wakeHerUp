@@ -64,7 +64,7 @@ class alarm extends Component{
 		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
 
 		//get new alarm clock every midnight.
-		schedule.scheduleJob('50 12 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+		schedule.scheduleJob('54 12 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 			fetch("/api/getAlarm")
 			.then(res=>res.json())
 			.then(res=>{
