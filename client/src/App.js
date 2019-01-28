@@ -329,6 +329,7 @@ class Home extends Component{
 							</div>
 						))}
 					</div>{/*下*/}
+					<div style={{alignSelf:"flex-end", margin:20, fontFamily:"helvetica-w01-light,sans-serif", fontSize:16, display:"flex", justifyContent:"space-between", alignItems:"center", width:260}}><a href="https://www.yihsinchu.com/" target="_blank" style={{color:"#fff", textDecoration:"none"}}>https://www.yihsinchu.com/</a><a href="https://www.instagram.com/yihsin_chu/?hl=ja" target="_blank"><img src={require("./image/instagram.png")} style={{width:50, height:50}}/></a></div>
 				</div>{/*第三頁*/}
 			</div>
 		);
