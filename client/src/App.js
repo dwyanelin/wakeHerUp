@@ -34,11 +34,6 @@ class alarm extends Component{
 	};
 
 	componentDidMount(){
-		fetch("/api/getServerTime")
-		.then(res=>res.json())
-		.then(res=>console.log(res))
-		.catch(error=>console.log(error));
-
 		const {seconds}=this.state;
 
 		//get alarm clock when entering the alarm page.
@@ -62,29 +57,6 @@ class alarm extends Component{
 			}
 		})
 		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
-
-		//get new alarm clock every midnight.
-		schedule.scheduleJob('22 13 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
-			fetch("/api/getAlarm")
-			.then(res=>res.json())
-			.then(res=>{
-				console.log(res);
-				this.setState({alarm:res.alarm});
-				let temp=res.alarm.split(":");
-				let hour=+temp[0];
-				let minute=+temp[1];
-				let d=new Date();
-				let dAlarm=new Date();
-				dAlarm.setHours(hour);//設定今天鬧鐘時間
-				dAlarm.setMinutes(minute);
-				//如果剛好回傳比較慢，又抽到例如00:00，setTimeout負的時間就會馬上執行
-				setTimeout(()=>{
-					this.youtube.seekTo(28);
-					this.setState({playing:true});
-				}, dAlarm-d);
-			})
-			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
-		});
 
 		//get new alarm clock every midnight.
 		schedule.scheduleJob('0 0 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
@@ -196,11 +168,6 @@ class Home extends Component{
 	secondPage=React.createRef();
 
 	componentDidMount(){
-		fetch("/api/getServerTime")
-		.then(res=>res.json())
-		.then(res=>console.log(res))
-		.catch(error=>console.log(error));
-
 		this.getLive();
 		if(!this.state.intervalIsSetYoutube){
 			let intervalYoutube=setInterval(this.getLive, 5000);

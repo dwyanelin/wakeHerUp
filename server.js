@@ -177,9 +177,6 @@ router.get("/getRecords", (req, res)=>{
 		);
 	});
 });
-router.get("/getServerTime", (req, res)=>{
-	return res.json(testAlarm);
-});
 
 // this is our create methid
 // this method adds new time in our database
@@ -204,15 +201,9 @@ app.get("/*", (req, res)=>{
 
 const port = process.env.PORT || 5000;
 
-let testAlarm="07:00";
-
 // launch our backend into a port
 app.listen(port, ()=>{
 	console.log(`LISTENING ON PORT ${port}`);
-
-	schedule.scheduleJob("40 12 * * *", ()=>{
-		testAlarm="00:00";
-	});
 
 	//node-schedule
 	schedule.scheduleJob('59 23 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
