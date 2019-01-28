@@ -177,7 +177,7 @@ router.get("/getRecords", (req, res)=>{
 		);
 	});
 });
-router.get("getServerTime", (req, res)=>{
+router.get("/getServerTime", (req, res)=>{
 	return res.json(new Date());
 });
 
