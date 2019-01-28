@@ -198,7 +198,11 @@ class Home extends Component{
 
 		fetch("/api/getServerTime")
 		.then(res=>res.json())
-		.then(serverTime=>console.log("serverTime:", serverTime))
+		.then(res=>{
+			console.log("serverTime:", res.serverTime);
+			console.log("testAlarm:", res.testAlarm);
+			console.log("localTime:", new Date());
+		})
 		.catch(error=>console.log("Home.componentDidMount.schedule.getServerTime", error));
 	}
 
