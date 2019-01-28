@@ -54,14 +54,37 @@ class alarm extends Component{
 			let dAlarm=new Date();
 			dAlarm.setHours(hour);//設定今天鬧鐘時間
 			dAlarm.setMinutes(minute);
-			//if(dAlarm>d){//鬧鐘時間比較大=時間未到，再設定到時候開播youtube，過了就別設定了，不然會馬上響
+			if(dAlarm>d){//鬧鐘時間比較大=時間未到，再設定到時候開播youtube，過了就別設定了，不然會馬上響
 				setTimeout(()=>{
 					this.youtube.seekTo(28);
 					this.setState({playing:true});
 				}, dAlarm-d);
-			//}
+			}
 		})
 		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
+
+		//get new alarm clock every midnight.
+		schedule.scheduleJob('50 12 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+			fetch("/api/getAlarm")
+			.then(res=>res.json())
+			.then(res=>{
+				console.log(res);
+				this.setState({alarm:res.alarm});
+				let temp=res.alarm.split(":");
+				let hour=+temp[0];
+				let minute=+temp[1];
+				let d=new Date();
+				let dAlarm=new Date();
+				dAlarm.setHours(hour);//設定今天鬧鐘時間
+				dAlarm.setMinutes(minute);
+				//如果剛好回傳比較慢，又抽到例如00:00，setTimeout負的時間就會馬上執行
+				setTimeout(()=>{
+					this.youtube.seekTo(28);
+					this.setState({playing:true});
+				}, dAlarm-d);
+			})
+			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
+		});
 
 		//get new alarm clock every midnight.
 		schedule.scheduleJob('0 0 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
