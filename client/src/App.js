@@ -54,12 +54,12 @@ class alarm extends Component{
 			let dAlarm=new Date();
 			dAlarm.setHours(hour);//設定今天鬧鐘時間
 			dAlarm.setMinutes(minute);
-			if(dAlarm>d){//鬧鐘時間比較大=時間未到，再設定到時候開播youtube，過了就別設定了，不然會馬上響
+			//if(dAlarm>d){//鬧鐘時間比較大=時間未到，再設定到時候開播youtube，過了就別設定了，不然會馬上響
 				setTimeout(()=>{
 					this.youtube.seekTo(28);
 					this.setState({playing:true});
 				}, dAlarm-d);
-			}
+			//}
 		})
 		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
 
