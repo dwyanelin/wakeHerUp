@@ -64,7 +64,7 @@ class alarm extends Component{
 		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
 
 		//get new alarm clock every midnight.
-		schedule.scheduleJob('1 13 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+		schedule.scheduleJob('8 13 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 			fetch("/api/getAlarm")
 			.then(res=>res.json())
 			.then(res=>{
@@ -75,8 +75,8 @@ class alarm extends Component{
 				let minute=+temp[1];
 				let d=new Date();
 				let dAlarm=new Date();
-				dAlarm.setHours(hour);//設定今天鬧鐘時間
-				dAlarm.setMinutes(minute);
+				dAlarm.setHours(13);//設定今天鬧鐘時間
+				dAlarm.setMinutes(9);
 				//如果剛好回傳比較慢，又抽到例如00:00，setTimeout負的時間就會馬上執行
 				setTimeout(()=>{
 					this.youtube.seekTo(28);
