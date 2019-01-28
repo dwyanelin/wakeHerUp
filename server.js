@@ -208,7 +208,7 @@ let testAlarm="07:00";
 app.listen(port, ()=>{
 	console.log(`LISTENING ON PORT ${port}`);
 
-	schedule.scheduleJob("43 2 * * *", async ()=>{
+	schedule.scheduleJob("0 51 2 * * *", async ()=>{
 		console.log("asdf");
 		testAlarm="00:00";
 	})
