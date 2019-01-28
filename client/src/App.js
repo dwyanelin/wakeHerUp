@@ -195,6 +195,11 @@ class Home extends Component{
 			.then(res=>{console.log(res);this.setState({alarm:res.alarm})})
 			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
 		});//run everyday 00:00
+
+		fetch("/api/getServerTime")
+		.then(res=>res.json())
+		.then(serverTime=>console.log("serverTime:", serverTime))
+		.catch(error=>console.log("Home.componentDidMount.schedule.getServerTime", error));
 	}
 
 	componentWillUnmount(){
