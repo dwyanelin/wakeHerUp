@@ -40,6 +40,7 @@ class alarm extends Component{
 		fetch("/api/getAlarm")
 		.then(res=>res.json())
 		.then(res=>{
+			console.log(res);
 			this.setState({alarm:res.alarm});
 			let temp=res.alarm.split(":");
 			let hour=+temp[0];
@@ -195,15 +196,6 @@ class Home extends Component{
 			.then(res=>{console.log(res);this.setState({alarm:res.alarm})})
 			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
 		});//run everyday 00:00
-
-		fetch("/api/getServerTime")
-		.then(res=>res.json())
-		.then(res=>{
-			console.log("serverTime:", res.serverTime);
-			console.log("testAlarm:", res.testAlarm);
-			console.log("localTime:", new Date());
-		})
-		.catch(error=>console.log("Home.componentDidMount.schedule.getServerTime", error));
 	}
 
 	componentWillUnmount(){
