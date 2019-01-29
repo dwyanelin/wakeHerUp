@@ -104,14 +104,14 @@ class Home extends Component{
 					</div>{/*上*/}
 					<div style={{display:"flex"}} className="narrowScreen">{/*下*/}
 						<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-start"}}>{/*下左*/}
-							<div style={{marginBottom:20, fontFamily:"helvetica-w01-bold,sans-serif", fontSize:134, color:"#fff"}}>
+							<div style={{marginBottom:20, fontFamily:"helvetica-w01-bold,sans-serif", fontSize:134, color:"#fff"}} className="narrowScreenTitle">
 								<div style={{lineHeight:"0.6em"}}>wake</div>
 								<div style={{lineHeight:"0.6em"}}>her up</div>
 							</div>
 							<div style={{fontFamily:"helvetica-w01-bold,sans-serif", fontSize:20, color:"#fff", marginLeft:10}}>30 days performance</div>
 						</div>{/*下左*/}
-						<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-end"}}>{/*下右*/}
-							<div style={{width:388, height:390, border:"2px solid #fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold", marginBottom:20}}>
+						<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-end", width:"100%"}}>{/*下右*/}
+							<div style={{width:388, height:390, border:"2px solid #fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold", marginBottom:20}} className="narrowScreenLive">
 								{liveId!==null?<YouTubePlayer
 									url={"https://www.youtube.com/watch?v="+liveId}
 									playing
@@ -123,7 +123,7 @@ class Home extends Component{
 								<div>starts from</div>
 								<div>00:00.</div></div>)}
 							</div>
-							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, cursor:"pointer", textDecoration:"underline", marginRight:130}} onClick={()=>window.scrollTo({top:this.secondPage.current.offsetTop, behavior:'smooth'})}>Vote when she will be woken ></a>
+							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, cursor:"pointer", textDecoration:"underline", marginRight:130}} onClick={()=>window.scrollTo({top:this.secondPage.current.offsetTop, behavior:'smooth'})} className="narrowScreenScroll">Vote when she will be woken ></a>
 						</div>{/*下右*/}
 					</div>{/*下*/}
 				</div>{/*第一頁*/}

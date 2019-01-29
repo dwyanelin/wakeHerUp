@@ -58,17 +58,28 @@ ul{
 }
 
 @media(max-width:991px){
-	.narrowScreen{
+	.narrowScreen{/*橫變直顯示，且全部置中*/
 		flex-direction:column;
 		align-items:center;
 	}
-	.narrowScreenWidth{
+	.narrowScreenWidth{/*每頁的寬度變auto*/
 		width:auto !important;
 	}
-	.narrowScreenBottom{
+	.narrowScreenBottom{/*有下一頁的每頁增加marginBottom，才不會連在一起*/
 		margin-bottom:50px;
 	}
-	.narrowScreenTime{
+	.narrowScreenTitle{/*窄螢幕會變三行，所以縮小字形*/
+		font-size:110px !important;
+	}
+	.narrowScreenLive{/*窄螢幕會超出螢幕，所以改置中且寬度90%*/
+		width:100% !important;
+		align-self:center;
+	}
+	.narrowScreenScroll{/*窄螢幕會超出螢幕，所以改置中且寬度90%*/
+		margin-right:0 !important;
+		align-self:flex-start;
+	}
+	.narrowScreenTime{/*把時間池預設paddingLeft消除，才能正確置中*/
 		padding-inline-start:0 !important;
 	}
 }
