@@ -1,191 +1,66 @@
 // /client/App.js
-import React, {Component} from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import axios from "axios";
-import YouTube from 'react-youtube';//https://www.npmjs.com/package/react-youtube
-import YouTubePlayer from 'react-player/lib/players/YouTube';
-import Cookies from 'universal-cookie';
+import React, {Component} from "react";//react基本配備
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";//根據網址顯示不同Component
+import axios from "axios";//丟post到server
+import YouTube from 'react-youtube';//youtube Component
+import YouTubePlayer from 'react-player/lib/players/YouTube';//顯而易見
+import Cookies from 'universal-cookie';//投票一天一次
 
-import './css/wakeHerUp.css';
-import Background from './image/background.jpg';
+import Alarm from "./Component/Alarm";//鬧鐘影片Component
+import Records from "./Component/Records";//讀記錄檔Component
 
-const {DateTime} = require("luxon");
+import './css/wakeHerUp.css';//首頁css設定
+import Background from './image/background.jpg';//背景圖
 
-var schedule=require('node-schedule');
+const {DateTime}=require("luxon");//判斷輸入isDate
+
+var schedule=require('node-schedule');//排程每天0點getAlarm
 
 function App(){
 	return (
 		<Router>
 			<div>
 				<Route exact path="/" component={Home} />
-				<Route path="/alarm" component={alarm} />
-				<Route path="/records" component={records} />
+				<Route path="/alarm" component={Alarm} />
+				<Route path="/records" component={Records} />
 			</div>
 		</Router>
 	);
 }
 
-class alarm extends Component{
-	state={
-		alarm:"",
-		url:null,
-		playing:false,
-		seconds:0,
-	};
-
-	componentDidMount(){
-		const {seconds}=this.state;
-
-		//get alarm clock when entering the alarm page.
-		fetch("/api/getAlarm")
-		.then(res=>res.json())
-		.then(res=>{
-			console.log(res);
-			this.setState({alarm:res.alarm});
-			let temp=res.alarm.split(":");
-			let hour=+temp[0];
-			let minute=+temp[1];
-			let d=new Date();
-			let dAlarm=new Date();
-			dAlarm.setHours(hour);//設定今天鬧鐘時間
-			dAlarm.setMinutes(minute);
-			if(dAlarm>d){//鬧鐘時間比較大=時間未到，再設定到時候開播youtube，過了就別設定了，不然會馬上響
-				setTimeout(()=>{
-					this.youtube.seekTo(28);
-					this.setState({playing:true});
-				}, dAlarm-d);
-			}
-		})
-		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
-
-		//get new alarm clock every midnight.
-		schedule.scheduleJob('0 0 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
-			fetch("/api/getAlarm")
-			.then(res=>res.json())
-			.then(res=>{
-				console.log(res);
-				this.setState({alarm:res.alarm});
-				let temp=res.alarm.split(":");
-				let hour=+temp[0];
-				let minute=+temp[1];
-				let d=new Date();
-				let dAlarm=new Date();
-				dAlarm.setHours(hour);//設定今天鬧鐘時間
-				dAlarm.setMinutes(minute);
-				//如果剛好回傳比較慢，又抽到例如00:00，setTimeout負的時間就會馬上執行
-				setTimeout(()=>{
-					this.youtube.seekTo(28);
-					this.setState({playing:true});
-				}, dAlarm-d);
-			})
-			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
-		});
-	}
-
-	render(){
-		const {url, playing, seconds}=this.state;
-		return (
-			<div style={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", fontFamily:"helvetica-w01-bold,sans-serif", margin:50}}>
-				<div style={{width:640, height:360, backgroundColor:"rgba(0,0,0,.1)"}}>
-					<YouTubePlayer
-						ref={ref=>this.youtube=ref}
-						url={"https://www.youtube.com/watch?v=LDU_Txk06tM"}
-						playing={playing}
-						controls
-						width="100%"
-						height="100%"
-						onPlay={()=>this.setState({playing:true})}
-						onPause={()=>this.setState({playing:false})}
-						onEnded={()=>this.setState({playing:false})}
-					/>
-				</div>
-				{/*<div style={{margin:10}}>
-					<span>Control </span>
-					<button onClick={()=>this.setState({playing:!playing})}>{playing?'Pause':'Play'}</button>
-				</div>
-
-				<div style={{margin:10}}>
-					<span>Url </span>
-					<input ref={ref=>{this.url=ref}} type='text' placeholder='Enter url' style={{width:400}}/>
-					<button onClick={()=>{
-						this.setState({url:this.url.value, playing:false});
-						this.youtube.seekTo(28);
-					}}>Load</button>
-				</div>
-
-				<div style={{margin:10}}>
-					<span>Seconds </span>
-					<input ref={ref=>{this.seconds=ref}} type='text' placeholder='Enter seconds' style={{width:100}}/>
-					<button onClick={()=>this.setState({seconds:parseFloat(this.seconds.value)})}>Set</button>
-				</div>
-
-				<div style={{margin:10}}>
-					<span>Now {seconds}</span>
-				</div>*/}
-			</div>
-		);
-	}
-}
-
-class records extends Component{
-	state={
-		files:[],
-	};
-
-	componentDidMount(){
-		fetch("/api/getRecords")
-		.then(res=>res.json())
-		.then(res=>this.setState({files:res}))
-		.catch(error=>console.log("records.componentDidMount.getRecords", error));
-	}
-
-	render(){
-		return (
-			<div>
-				{this.state.files.map((e, i)=>(
-					<div style={{margin:10, fontFamily:"helvetica-w01-light,sans-serif"}} key={i}>
-						<h1>{e.fileName}</h1>
-						<p>{e.content.split("\n").map((e,i)=>e!==""&&<div key={i}>{e}</div>)}</p>
-					</div>
-				))}
-			</div>
-		);
-	}
-}
-
 class Home extends Component{
 	state={
-		liveId:null,
-		alarm:"",
-		hour:"",
-		minute:"",
-		times:[],
-		videoIds:[],
-		intervalIsSetYoutube:false,
-		intervalIsSet:false,
+		liveId:null,//live時影片的id，每5秒會抓一次，開播時使用者也能迅速看到
+		alarm:"",//如果鬧鐘時間還沒到，首頁右上角就會顯示
+		hour:"",//投票輸入的小時
+		minute:"",//投票輸入的分鐘
+		times:[],//投票池所有的時間
+		videoIds:[],//每天的紀錄片
+		intervalIsSetYoutube:false,//每5秒擷取直播的內容，用來ComponentWillUnmount時clear掉
+		intervalIsSet:false,//每秒get DB存取的時間池
 	};
 
-	secondPage=React.createRef();
+	secondPage=React.createRef();//第二頁的ref，按首頁vote會捲動至第二頁
 
 	componentDidMount(){
-		this.getLive();
-		if(!this.state.intervalIsSetYoutube){
+		this.getLive();//一進頁面0秒get live
+		if(!this.state.intervalIsSetYoutube){//開始設interval，5秒後開始循環get live
 			let intervalYoutube=setInterval(this.getLive, 5000);
 			this.setState({intervalIsSetYoutube:intervalYoutube});
 		}
 
-		this.getTimeFromDB();
-		if(!this.state.intervalIsSet){
+		this.getTimeFromDB();//0秒get time db
+		if(!this.state.intervalIsSet){//1秒interval
 			let interval=setInterval(this.getTimeFromDB, 1000);
 			this.setState({intervalIsSet:interval});
 		}
 
-		fetch("/api/getYoutube")
+		fetch("/api/getYoutube")//get 紀錄片
 		.then(video=>video.json())
 		.then(res=>res.videoIds&&this.setState({videoIds:res.videoIds}))
 		.catch(error=>console.log("Home.componentDidMount.getYoutube", error));
 
-		fetch("/api/getAlarm")
+		fetch("/api/getAlarm")//get server抽好的鬧鐘時間
 		.then(res=>res.json())
 		.then(res=>this.setState({alarm:res.alarm}))
 		.catch(error=>console.log("Home.componentDidMount.getAlarm", error));
@@ -195,10 +70,10 @@ class Home extends Component{
 			.then(res=>res.json())
 			.then(res=>{console.log(res);this.setState({alarm:res.alarm})})
 			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
-		});//run everyday 00:00
+		});//每天0點get server新抽的alarm time
 	}
 
-	componentWillUnmount(){
+	componentWillUnmount(){//離開時，把getLive, getTimeFromDB兩個interval刪掉
 		if(this.state.intervalIsSetYoutube){
 			clearInterval(this.state.intervalIsSetYoutube);
 			this.setState({intervalIsSetYoutube:null});
@@ -212,12 +87,12 @@ class Home extends Component{
 
 	render(){
 		const {liveId, alarm, hour, minute, times, videoIds}=this.state;
-		var alarmDateEnd=new Date();
+		var alarmDateEnd=new Date();//用來計算是否還在鬧鐘時間內，大於下1分鐘0秒才算超過，所以+1
 		alarmDateEnd.setHours(alarm.split(":")[0]);
 		alarmDateEnd.setMinutes(+alarm.split(":")[1]+1);
 		alarmDateEnd.setSeconds(0);
-		var now=new Date();
-		const opts={
+		var now=new Date();//跟alarmDateEnd比較
+		const opts={//紀錄片尺寸
 			height:'246',
 			width:'220'
 		};
@@ -335,7 +210,7 @@ class Home extends Component{
 		);
 	}
 
-	getLive=()=>{
+	getLive=()=>{//需要直播者的channelId和開發者的google api key
 		fetch("https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=UCpnZDChii8ilPTOec5BF7Kg&eventType=live&type=video&key=AIzaSyACeRvnmXJ_fD8AA0da-nJ-Vv4e6ExRL-8")
 		.then(res=>res.json())
 		.then(result=>{
@@ -345,18 +220,18 @@ class Home extends Component{
 		});
 	};
 
-	getTimeFromDB=()=>{
+	getTimeFromDB=()=>{//叫server get mLab online mongoDB的time pool
 		fetch("/api/getTime")
 		.then(time=>time.json())
 		.then(res=>res.data&&this.setState({times:res.data}));
 	};
 
-	addLock=false;
+	addLock=false;//不連續觸發投票submit
 	addTime=async e=>{
-		if(this.addLock===true){
+		if(this.addLock===true){//連續滾
 			return;
 		}
-		this.addLock=true;
+		this.addLock=true;//lock
 		var {hour, minute}=this.state;
 
 		//validate time
@@ -387,22 +262,22 @@ class Home extends Component{
 		var time=hour+":"+minute;
 		//formalize
 
-		const cookies = new Cookies();
+		const cookies = new Cookies();//一天一次
 		var alreadyAdd=cookies.get('alreadyAdd');
 		if(alreadyAdd===undefined){//今天還沒加
 			let result=await axios.post("/api/putTime", {time});
 			if(result.data.success===true){
-				var expires=new Date();
+				var expires=new Date();//設定明天0點到期的cookie，讓使用者明天才能再投
 				expires.setDate(expires.getDate()+1);//明天
 				expires.setHours(0, 0, 0, 0);//midnight
 				cookies.set('alreadyAdd', true, {path:'/', expires});
 				this.addLock=false;
 			}
-			else{
+			else{//未知失敗情況，解鎖讓使用者繼續加
 				this.addLock=false;
 			}
 		}
-		else{
+		else{//加了滾
 			this.addLock=false;
 		}
 	}
