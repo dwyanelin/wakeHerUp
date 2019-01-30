@@ -123,7 +123,7 @@ class Home extends Component{
 								<div>starts from</div>
 								<div>00:00.</div></div>)}
 							</div>
-							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, cursor:"pointer", textDecoration:"underline", marginRight:130}} onClick={()=>window.scrollTo({top:this.secondPage.current.offsetTop, behavior:'smooth'})} className="narrowScreenScroll">Vote when she will be woken ></a>
+							<a style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:19, cursor:"pointer", textDecoration:"underline", marginRight:130}} onClick={()=>window.scroll({top:this.secondPage.current.offsetTop, behavior:'smooth'})} className="narrowScreenScroll">Vote when she will be woken ></a>
 						</div>{/*下右*/}
 					</div>{/*下*/}
 				</div>{/*第一頁*/}
