@@ -4,6 +4,7 @@ const bodyParser=require("body-parser");
 const path=require("path");
 
 const Time=require("./time");
+const Records=require("./records");
 
 const app=express();
 const router=express.Router();
@@ -206,10 +207,10 @@ app.listen(port, ()=>{
 	console.log(`LISTENING ON PORT ${port}`);
 
 	//node-schedule
-	schedule.scheduleJob('59 23 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+	schedule.scheduleJob('0 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 		//取
-		let times=await Time.find((err, data)=>{//[{time:""}, {time:""}]
-			if(err) console.log("server.listen:", err);
+		let times=await Time.find((error, data)=>{//[{time:""}, {time:""}]
+			if(error) console.log("server.listen.Time.find:", error);
 			return data;
 		});
 		//抽
@@ -227,6 +228,19 @@ app.listen(port, ()=>{
 		let content=d+"\n";
 		content+="選到的時間："+alarm+"\n";
 		content+="所有的時間："+times.map(e=>e.time).join(", ")+"\n";
+
+		let records=await Records.find((error, data)=>{//[{title:"", content:""}, ...]
+			if(error) console.log("server.listen.Records.find:", error);
+			return data;
+		});
+		let dayOrder=records.length+1;
+		records=new Records();
+		records.title="Day "+dayOrder;
+		records.content=content;
+		records.save(error=>{
+			if(error) throw error;
+		});
+
 		fs.readdir("records", (error, files)=>{//files count determine file name(Day order)
 			if(error) throw error;
 			fs.writeFile("./records/Day "+(files.length)+".txt", content, error=>{
