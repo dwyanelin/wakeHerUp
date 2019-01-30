@@ -10,6 +10,11 @@ export default class Records extends Component{
 		.then(res=>res.json())
 		.then(res=>this.setState({files:res}))
 		.catch(error=>console.log("records.componentDidMount.getRecords", error));
+
+		fetch("/api/getRecordsOnline")
+		.then(res=>res.json())
+		.then(records=>console.log(records))
+		.catch(error=>console.log("records.componentDidMount.getRecordsOnline", error));
 	}
 
 	render(){

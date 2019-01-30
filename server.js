@@ -178,6 +178,12 @@ router.get("/getRecords", (req, res)=>{
 		);
 	});
 });
+router.get("/getRecordsOnline", (req, res)=>{
+	Records.find((error, data)=>{
+		if(error) return res.json({success:false, error});
+		return res.json({success:true, data:data});
+	});
+});
 
 // this is our create methid
 // this method adds new time in our database
