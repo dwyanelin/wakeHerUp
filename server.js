@@ -177,6 +177,11 @@ router.get("/getRecords", (req, res)=>{
 		);
 	});
 });
+router.get("/test", (req, res)=>{
+	fs.readdir("records", function(err, files) {
+		res.json(files||err);
+	});
+});
 
 // this is our create methid
 // this method adds new time in our database
