@@ -177,19 +177,6 @@ router.get("/getRecords", (req, res)=>{
 		);
 	});
 });
-router.get("/test", (req, res)=>{
-	fs.readdir("records", function(err, files) {
-
-		fs.readdir("records", (error, files)=>{//files count determine file name(Day order)
-			if(error) throw error;
-			fs.writeFile("./records/Day "+files.length+".txt", "asdf", error=>{
-				if(error) throw error;
-			});
-		});
-
-		res.json(files||err);
-	});
-});
 
 // this is our create methid
 // this method adds new time in our database
@@ -242,7 +229,7 @@ app.listen(port, ()=>{
 		content+="所有的時間："+times.map(e=>e.time).join(", ")+"\n";
 		fs.readdir("records", (error, files)=>{//files count determine file name(Day order)
 			if(error) throw error;
-			fs.writeFile("./records/Day "+files.length+".txt", content, error=>{
+			fs.writeFile("./records/Day "+(files.length)+".txt", content, error=>{
 				if(error) throw error;
 			});
 		});
