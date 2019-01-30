@@ -206,8 +206,7 @@ app.listen(port, ()=>{
 	console.log(`LISTENING ON PORT ${port}`);
 
 	//node-schedule
-	let i=0;
-	schedule.scheduleJob('0 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+	schedule.scheduleJob('59 23 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 		//取
 		let times=await Time.find((err, data)=>{//[{time:""}, {time:""}]
 			if(err) console.log("server.listen:", err);
@@ -228,8 +227,11 @@ app.listen(port, ()=>{
 		let content=d+"\n";
 		content+="選到的時間："+alarm+"\n";
 		content+="所有的時間："+times.map(e=>e.time).join(", ")+"\n";
-		fs.writeFile("./records/Day "+(i++)+".txt", content, error=>{
+		fs.readdir("records", (error, files)=>{//files count determine file name(Day order)
 			if(error) throw error;
+			fs.writeFile("./records/Day "+files.length+".txt", content, error=>{
+				if(error) throw error;
+			});
 		});
 		//刪
 		let deleteMany=await Time.deleteMany({}, error=>{
