@@ -207,7 +207,7 @@ app.listen(port, ()=>{
 	console.log(`LISTENING ON PORT ${port}`);
 
 	//node-schedule
-	schedule.scheduleJob('0 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+	schedule.scheduleJob('59 23 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 		//取
 		let times=await Time.find((error, data)=>{//[{time:""}, {time:""}]
 			if(error) console.log("server.listen.Time.find:", error);
