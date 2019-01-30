@@ -205,19 +205,8 @@ const port = process.env.PORT || 5000;
 app.listen(port, ()=>{
 	console.log(`LISTENING ON PORT ${port}`);
 
-	/*fs.readdir("records", (err, files)=>{//count records directory files number, to determine file name
-		console.log(err, files);
-		if(files===undefined){//git下如果該資料夾下無檔案，會把資料夾整個刪掉，所以沒檔時要先創資料夾再寫檔
-			files=[];
-			fs.mkdirSync("records");
-		}*/
-		fs.writeFile("./records/test.txt", "test", error=>{
-			if(error) throw error;
-		});
-	//});
-
 	//node-schedule
-	schedule.scheduleJob('59 23 * * *', async ()=>{//second, minute, hour, day of month, month, day of week
+	schedule.scheduleJob('0 * * * * *', async ()=>{//second, minute, hour, day of month, month, day of week
 		//取
 		let times=await Time.find((err, data)=>{//[{time:""}, {time:""}]
 			if(err) console.log("server.listen:", err);
@@ -238,14 +227,8 @@ app.listen(port, ()=>{
 		let content=d+"\n";
 		content+="選到的時間："+alarm+"\n";
 		content+="所有的時間："+times.map(e=>e.time).join(", ")+"\n";
-		fs.readdir("records", (err, files)=>{//count records directory files number, to determine file name
-			if(files===undefined){//git下如果該資料夾下無檔案，會把資料夾整個刪掉，所以沒檔時要先創資料夾再寫檔
-				files=[];
-				fs.mkdirSync("records");
-			}
-			fs.writeFile("records/Day "+(files.length+1)+".txt", content, error=>{
-				if(error) throw error;
-			});
+		fs.writeFile("./records/Day "+files.length+".txt", content, error=>{
+			if(error) throw error;
 		});
 		//刪
 		let deleteMany=await Time.deleteMany({}, error=>{
