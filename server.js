@@ -179,6 +179,14 @@ router.get("/getRecords", (req, res)=>{
 });
 router.get("/test", (req, res)=>{
 	fs.readdir("records", function(err, files) {
+
+		fs.readdir("records", (error, files)=>{//files count determine file name(Day order)
+			if(error) throw error;
+			fs.writeFile("./records/Day "+files.length+".txt", "asdf", error=>{
+				if(error) throw error;
+			});
+		});
+
 		res.json(files||err);
 	});
 });
