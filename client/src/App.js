@@ -88,9 +88,9 @@ class Home extends Component{
 	render(){
 		const {liveId, alarm, hour, minute, times, videoIds}=this.state;
 		var alarmDateEnd=new Date();//用來計算是否還在鬧鐘時間內，大於下1分鐘0秒才算超過，所以+1
-		alarmDateEnd.setHours(alarm.split(":")[0]);
-		alarmDateEnd.setMinutes(+alarm.split(":")[1]+1);
-		alarmDateEnd.setSeconds(0);
+		alarmDateEnd.setUTCHours(alarm.split(":")[0]);//顯示判斷同步英國時間，英國0~7台灣8~15
+		alarmDateEnd.setUTCMinutes(+alarm.split(":")[1]+1);//setUTC就是用+0的時區去設定剛好是英國
+		alarmDateEnd.setUTCSeconds(0);
 		var now=new Date();//跟alarmDateEnd比較
 		const opts={//紀錄片尺寸
 			height:'246',
@@ -269,7 +269,7 @@ class Home extends Component{
 			if(result.data.success===true){
 				var expires=new Date();//設定明天0點到期的cookie，讓使用者明天才能再投
 				expires.setDate(expires.getDate()+1);//明天
-				expires.setHours(0, 0, 0, 0);//midnight
+				expires.setHours(0, 0, 0, 0);//Date.setHours(hour, min, sec, millisec)
 				cookies.set('alreadyAdd', true, {path:'/', expires});
 				this.addLock=false;
 			}
