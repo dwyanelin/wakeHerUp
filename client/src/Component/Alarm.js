@@ -70,6 +70,7 @@ export default class Alarm extends Component{
 						url={"https://www.youtube.com/watch?v=LDU_Txk06tM"}
 						playing={playing}
 						controls
+						loop
 						width="100%"
 						height="100%"
 						onPlay={()=>this.setState({playing:true})}
