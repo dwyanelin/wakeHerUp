@@ -181,6 +181,7 @@ class Home extends Component{
 								}}
 							/>
 						</form>{/*左下*/}
+						<span style={{width:242}}>Valid time period: 00:00 - 07:00</span>
 					</div>{/*左*/}
 					<div style={{flex:1, display:"flex", alignItems:"center"}}>{/*右*/}
 						<ul className="wideScreenTime narrowScreenTime">
@@ -235,7 +236,7 @@ class Home extends Component{
 		var {hour, minute}=this.state;
 
 		//validate time
-		if(hour===""||minute===""){
+		if(hour===""||minute===""||isNaN(hour)||isNaN(minute)){
 			this.addLock=false;
 			return;
 		}
