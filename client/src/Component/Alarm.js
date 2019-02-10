@@ -29,7 +29,7 @@ export default class Alarm extends Component{
 			dAlarm.setMinutes(minute);
 			if(dAlarm>d){//鬧鐘時間比較大=時間未到，再設定到時候開播youtube，過了就別設定了，不然會馬上響
 				setTimeout(()=>{
-					this.youtube.seekTo(28);
+					this.youtube.seekTo(140);
 					this.setState({playing:true});
 				}, dAlarm-d);
 			}
@@ -52,7 +52,7 @@ export default class Alarm extends Component{
 				dAlarm.setMinutes(minute);
 				//如果剛好回傳比較慢，又抽到例如00:00，setTimeout負的時間就會馬上執行
 				setTimeout(()=>{
-					this.youtube.seekTo(28);
+					this.youtube.seekTo(140);
 					this.setState({playing:true});
 				}, dAlarm-d);
 			})
@@ -67,7 +67,7 @@ export default class Alarm extends Component{
 				<div style={{width:640, height:360, backgroundColor:"rgba(0,0,0,.1)"}}>
 					<YouTubePlayer
 						ref={ref=>this.youtube=ref}
-						url={"https://www.youtube.com/watch?v=LDU_Txk06tM"}
+						url={"https://www.youtube.com/watch?v=rvrZJ5C_Nwg"}
 						playing={playing}
 						controls
 						loop
@@ -88,7 +88,7 @@ export default class Alarm extends Component{
 					<input ref={ref=>{this.url=ref}} type='text' placeholder='Enter url' style={{width:400}}/>
 					<button onClick={()=>{
 						this.setState({url:this.url.value, playing:false});
-						this.youtube.seekTo(28);
+						this.youtube.seekTo(140);
 					}}>Load</button>
 				</div>
 
