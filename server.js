@@ -252,12 +252,12 @@ app.listen(port, ()=>{
 		//存mLab online mongoDB
 
 		//存檔案
-		fs.readdir("records", (error, files)=>{//files count determine file name(Day order)
+		/*fs.readdir("records", (error, files)=>{//files count determine file name(Day order)
 			if(error) throw error;
 			fs.writeFile("./records/Day "+(files.length)+".txt", content, error=>{//寫檔
 				if(error) throw error;
 			});
-		});
+		});*/
 		//存檔案
 
 		//刪
