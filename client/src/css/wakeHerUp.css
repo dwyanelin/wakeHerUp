@@ -71,15 +71,18 @@ ul{
 	.narrowScreenTitle{/*窄螢幕會變三行，所以縮小字形*/
 		font-size:110px !important;
 	}
-	.narrowScreenLive{/*窄螢幕會超出螢幕，所以改置中且寬度90%*/
+	.narrowScreenLive{/*窄螢幕會超出螢幕，所以改置中且寬度100%*/
 		width:100% !important;
 		align-self:center;
 	}
-	.narrowScreenScroll{/*窄螢幕會超出螢幕，所以改置中且寬度90%*/
+	.narrowScreenScroll{/*窄螢幕還設margin-right會變兩行，所以改0且置左*/
 		margin-right:0 !important;
 		align-self:flex-start;
 	}
 	.narrowScreenTime{/*把時間池預設paddingLeft消除，才能正確置中*/
 		padding-inline-start:0 !important;
+	}
+	.narrowScreenRecordsTitle{/*窄螢幕不要貼左邊，也對稱ig*/
+		margin-left:20px;
 	}
 }

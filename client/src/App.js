@@ -195,12 +195,12 @@ class Home extends Component{
 				</div>{/*第二頁*/}
 
 				<div style={{minHeight:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}} className="narrowScreenWidth">{/*第三頁*/}
-					<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:16, color:"#fff", lineHeight:"1.3em", marginBottom:40}}>{/*上*/}
+					<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:16, color:"#fff", lineHeight:"1.3em", marginBottom:20}} className="narrowScreenRecordsTitle">{/*上*/}
 						Video record from the first day to 30th.
 					</div>{/*上*/}
-					<div style={{display:"flex", justifyContent:"space-between", flexWrap:"wrap"}}>{/*下*/}
+					<div style={{display:"flex", justifyContent:"center", flexWrap:"wrap"}}>{/*下*/}
 						{videoIds.length>0&&videoIds.map((e, i)=>(
-							<div style={{width:220, height:246, border:"2px solid #fff", marginBottom:20}}>
+							<div style={{width:220, height:246, border:"2px solid #fff", margin:20}}>
 								<YouTube videoId={e} opts={opts} onError={error=>console.log(error)} key={i}/>
 							</div>
 						))}
