@@ -31,6 +31,12 @@ export default class Alarm extends Component{
 				setTimeout(()=>{
 					this.youtube.seekTo(140);
 					this.setState({playing:true});
+					setTimeout(()=>{
+						this.setState({playing:false});
+						setTimeout(()=>{
+							this.setState({playing:true});
+						}, 1000);
+					}, 2000);
 				}, dAlarm-d);
 			}
 		})
@@ -54,6 +60,12 @@ export default class Alarm extends Component{
 				setTimeout(()=>{
 					this.youtube.seekTo(140);
 					this.setState({playing:true});
+					setTimeout(()=>{
+						this.setState({playing:false});
+						setTimeout(()=>{
+							this.setState({playing:true});
+						}, 1000);
+					}, 2000);
 				}, dAlarm-d);
 			})
 			.catch(error=>console.log("Home.componentDidMount.schedule.getAlarm", error));
