@@ -108,7 +108,7 @@ class Home extends Component{
 								<div style={{lineHeight:"0.6em"}}>wake</div>
 								<div style={{lineHeight:"0.6em"}}>her up</div>
 							</div>
-							<div style={{fontFamily:"helvetica-w01-bold,sans-serif", fontSize:20, color:"#fff", marginLeft:10}}>30 days performance</div>
+							<div style={{fontFamily:"helvetica-w01-bold,sans-serif", fontSize:20, color:"#fff", marginLeft:10}}>19 days performance</div>
 						</div>{/*下左*/}
 						<div style={{flex:1, display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"flex-end", width:"100%"}}>{/*下右*/}
 							<div style={{width:388, height:390, border:"2px solid #fff", fontFamily:"helvetica-w01-light,sans-serif", fontSize:25, color:"#fff", fontWeight:"bold", marginBottom:20}} className="narrowScreenLive">
@@ -196,7 +196,7 @@ class Home extends Component{
 
 				<div style={{minHeight:"100vh", width:970, display:"flex", flexDirection:"column", justifyContent:"center"}} className="narrowScreenWidth">{/*第三頁*/}
 					<div style={{fontFamily:"helvetica-w01-light,sans-serif", fontSize:16, color:"#fff", lineHeight:"1.3em", marginBottom:20}} className="narrowScreenRecordsTitle">{/*上*/}
-						Video record from the first day to 30th.
+						Video record from the first day to 19th.
 					</div>{/*上*/}
 					<div style={{display:"flex", justifyContent:"center", flexWrap:"wrap"}}>{/*下*/}
 						{videoIds.length>0&&videoIds.map((e, i)=>(
